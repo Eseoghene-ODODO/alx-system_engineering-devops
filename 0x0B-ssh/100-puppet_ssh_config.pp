@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Client configuration file (w/ Puppet)
-file { '/home/<your-username>/.ssh/config':
+file { '/home/ubuntu/.ssh/config':
   ensure  => file,
-  owner   => '<your-username>',
-  group   => '<your-group>',
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
   mode    => '0644',
   content => "
-    Host <server-ip-address>
+    Host ubuntu@100.25.38.184
       IdentityFile ~/.ssh/school
       PasswordAuthentication no
   ",
