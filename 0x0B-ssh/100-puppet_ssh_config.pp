@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Client configuration file (w/ Puppet)
 
-file { '/root/.ssh/config':
+file { '/etc/ssh/ssh_config':
   ensure  => 'present',
   owner   => 'root',
   group   => 'root',
