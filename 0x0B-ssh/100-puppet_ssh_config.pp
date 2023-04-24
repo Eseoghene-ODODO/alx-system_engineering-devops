@@ -1,11 +1,14 @@
 #!/usr/bin/env ruby
 # Client configuration file (w/ Puppet)
-require 'net/ssh'
 
-ssh_key = File.read("#{ENV['HOME']}/.ssh/school")
-ssh_host = '100.25.201.12'
-ssh_user = 'ubuntu'
-
-Net::SSH.start(ssh_host, ssh_user, keys: [ssh_key]) do |ssh|
-  # do something over SSH connection
-end
+file { '/home/root/.ssh/config':
+  ensure  => file,
+  owner   => 'root,
+  group   => root',
+  mode    => '0644',
+  content => "
+    Host 35.175.132.186
+      IdentityFile ~/.ssh/school
+      PasswordAuthentication no
+  ",
+}
