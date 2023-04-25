@@ -1,0 +1,25 @@
+#!/bin/bash
+# A script that configures a Nginx server to have a custom 404 page that contains the string Ceci n'est pas une page.
+
+# Create a new server block configuration file for the redirection
+sudo sh -c "cat > /etc/nginx/sites-available/redirect.conf <<EOF
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name _;
+
+    location /redirect_me {
+        return 301 http://one-techschool.tech/;
+    }
+}
+EOF"
+
+# Enable the new server block configuration file
+sudo ln -s /etc/nginx/sites-available/redirect.conf /etc/nginx/sites-enabled/
+
+# Remove the default server block configuration file
+sudo rm /etc/nginx/sites-enabled/default
+
+# Test the Nginx configuration and restart the Nginx service
+sudo nginx -t && sudo service nginx restar
