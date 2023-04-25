@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# A script that configures a Nginx server so that /redirect_me is redirecting to another page
+
+# Configure Nginx to redirect /redirect_me to another page
+sudo sed -i 's|^\s*location / {$|\n\n    location /redirect_me {\n        return 301 https://one-techschool.tech/;\n    }\n\n    location / {\n|' /etc/nginx/sites-available/default
+
+# Restart Nginx to apply the configuration changes
+sudo systemctl restart nginx
