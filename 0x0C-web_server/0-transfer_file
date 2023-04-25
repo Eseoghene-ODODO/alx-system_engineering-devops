@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# A Bash script that transfers a file from our client to a server
+
 
 # Display usage if less than 4 parameters are passed
 if [ $# -lt 4 ]; then
