@@ -13,7 +13,6 @@ path_to_file="$1"
 ip="$2"
 username="$3"
 path_to_ssh_key="$4"
-server_directory="/home/ubuntu/"
 
 # Transfer file using scp
 scp -o StrictHostKeyChecking=no -i "$path_to_ssh_key" "$path_to_file" "$username"@"$ip":"$server_directory"
