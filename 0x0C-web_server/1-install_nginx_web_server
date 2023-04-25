@@ -17,7 +17,7 @@ sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-availabl
 sudo service nginx restart
 
 # Create index.html with "Hello World!" string
-echo "<html><body><h1>Hello World!</h1></body></html>" | sudo tee /var/www/html/index.html > /dev/null
+echo "Hello World!" | sudo tee /var/www/html/index.html > /dev/null
 
 # Print success message
 echo "Nginx installed and configured successfully!"
