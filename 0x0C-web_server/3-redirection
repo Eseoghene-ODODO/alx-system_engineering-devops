@@ -1,18 +1,24 @@
 #!/usr/bin/env bash
 # A script that configures Nginx server so that /redirect_me is redirecting to another page.
 
+# Create a new configuration file for the site
+sudo tee /etc/nginx/sites-available/redirect.conf > /dev/null <<EOF
+server {
+    listen 80;
+    listen [::]:80;
+    server_name redirect.one-techschool.tech;
 
-# Remove the existing location block for /redirect_me
-sudo sed -i '/location \/redirect_me {/,/}/d' /etc/nginx/sites-enabled/default
+    location /redirect_me {
+        return 301 http://one-techschool.tech/;
+    }
+}
+EOF
 
-# Add a new location block for /redirect_me
-sudo sed -i '/server_name _;/a \    location \/redirect_me {\n        return 301 https:\/\/one-techschool.tech\/;\n    }' /etc/nginx/sites-enabled/default
+# Create a symbolic link to enable the new configuration file
+sudo ln -sf /etc/nginx/sites-available/redirect.conf /etc/nginx/sites-enabled/
 
-# Add access and error logging for /redirect_me
-sudo sed -i '/server_name _;/a \    access_log \/var\/log\/nginx\/access.log;\n    error_log \/var\/log\/nginx\/error.log;' /etc/nginx/sites-enabled/default
-
-# Test Nginx configuration
+# Test the Nginx configuration
 sudo nginx -t
 
-# Reload Nginx to apply the configuration changes
+# Reload the Nginx service
 sudo service nginx reload

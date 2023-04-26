@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# A script that configures Nginx server so that /redirect_me is redirecting to another page.
+
+# Set up Nginx configuration file
+sudo tee /etc/nginx/sites-available/one-techschool.tech <<EOF
+server {
+    listen 80;
+    listen [::]:80;
+    server_name one-techschool.tech;
+    return 301 http://one-techschool.tech/;
+}
+EOF
+
+# Verify that the configuration file exists
+if [ -f /etc/nginx/sites-available/one-techschool.tech ]; then
+    # Remove existing symbolic link
+    sudo rm -f /etc/nginx/sites-enabled/default
+
+    # Create new symbolic link
+    sudo ln -s /etc/nginx/sites-available/one-techschool.tech /etc/nginx/sites-enabled/
+
+
+    # Verify and reload Nginx configuration again
+    sudo nginx -t && sudo service nginx reload
+else
+    echo "Nginx configuration file not found."
+fi
