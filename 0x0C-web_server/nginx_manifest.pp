@@ -1,9 +1,3 @@
-#!/usr/bin/env bash
-# A script that Install Nginx web server (w/ Puppet)
-
-
-# Create a Puppet manifest file
-cat <<EOF > nginx_manifest.pp
 class nginx {
   package { 'nginx':
     ensure => installed,
@@ -23,7 +17,3 @@ class nginx {
 }
 
 class { 'nginx': }
-EOF
-
-# Apply the Puppet manifest
-sudo puppet apply nginx_manifest.pp
