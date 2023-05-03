@@ -1,24 +1,11 @@
 #!/usr/bin/env bash
 # A script that configures Nginx server so that /redirect_me is redirecting to another page.
 
-# Create a new configuration file for the site
-sudo tee /etc/nginx/sites-available/redirect.conf > /dev/null <<EOF
-server {
-    listen 80;
-    listen [::]:80;
-    server_name redirect.one-techschool.tech;
+# sudo apt-get update
+# sudo apt-get install -y nginx
 
-    location /redirect_me {
-        return 301 http://one-techschool.tech/;
-    }
-}
-EOF
+echo "Hello World!" | sudo tee /var/www/html/index.html
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.github.com/Eseoghene-ODODO permanent;"
+sudo sed -i 's/server_name _;/$string_for_replacement/' /etc/nginx/sites-enabled/default
 
-# Create a symbolic link to enable the new configuration file
-sudo ln -sf /etc/nginx/sites-available/redirect.conf /etc/nginx/sites-enabled/
-
-# Test the Nginx configuration
-sudo nginx -t
-
-# Reload the Nginx service
-sudo service nginx reload
+sudo service nginx restart
