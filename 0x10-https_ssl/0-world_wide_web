@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Function to display DNS record information for a subdomain
+function check_subdomain {
+    record=$(dig +short $1.$2)
+    if [[ -n "$record" ]]; then
+        echo "The subdomain $1 is an A record and points to $record"
+    else
+        echo "No DNS record found for subdomain $1"
+    fi
+}
+
+# Check domain and subdomain parameters
+if [[ $# -eq 0 ]]; then
+    echo "Error: Domain parameter required"
+    exit 1
+fi
+domain=$1
+subdomain=$2
+
+# Check for specific subdomain or display all subdomains
+if [[ -n "$subdomain" ]]; then
+    check_subdomain $subdomain $domain
+else
+    check_subdomain www $domain
+    check_subdomain lb-01 $domain
+    check_subdomain web-01 $domain
+    check_subdomain web-02 $domain
+fi

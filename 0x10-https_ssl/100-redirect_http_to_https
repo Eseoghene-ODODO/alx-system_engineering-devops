@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Configure HAproxy to automatically redirect HTTP traffic to HTTPS.
+
+# Stop HAproxy service
+systemctl stop haproxy.service
+
+# Backup HAproxy configuration file
+cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
+
+# Edit HAproxy configuration file
+sed -i '/^frontend www-https/a redirect scheme https if !{ ssl_fc }' /etc/haproxy/haproxy.cfg
+
+# Restart HAproxy service
+systemctl start haproxy.service
