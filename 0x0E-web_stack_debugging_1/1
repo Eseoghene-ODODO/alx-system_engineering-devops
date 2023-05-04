@@ -1,3 +1,1 @@
- * Starting nginx nginx
-   ...done.
 Usage: nginx {start|stop|restart|reload|force-reload|status|configtest|rotate|upgrade}
