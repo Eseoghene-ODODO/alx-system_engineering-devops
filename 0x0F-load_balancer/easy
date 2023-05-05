@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Stop the Nginx service
+sudo service nginx stop
+
+# Remove the Nginx package
+sudo apt-get remove nginx -y
+
+# Remove the Nginx configuration files
+sudo rm -rf /etc/nginx/
+
+# Purge the Nginx package to remove any residual configuration files
+sudo apt-get purge nginx -y
+
+# Clean up any remaining dependencies
+sudo apt-get autoremove -y

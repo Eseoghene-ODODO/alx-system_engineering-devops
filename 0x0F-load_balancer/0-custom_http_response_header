@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# A script that configure Nginx so that its HTTP response contains a custom header (on web-01 and web-02)
+
+# Update and upgrade packages
+sudo apt-get update
+sudo apt-get upgrade -y
+
+# Install Nginx if not already installed
+sudo apt-get install -y nginx
+
+# Creating Sample Page
+echo "Hello World!" > /var/www/html/index.html
+
+# add the following configuration to the existing server block
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.github.com permanent;"
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
+
+# code for error page and redirect error 404
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+string_for_replacement="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+sudo sed -i "s/listen 80 default_server;/$string_for_replacement/" /etc/nginx/sites-available/default
+
+hostname=$(hostname)
+
+# Edit the default Nginx configuration file
+sudo sed -i "/http {/a \\tserver_tokens off;\n\tadd_header X-Served-By $hostname;" /etc/nginx/nginx.conf
+
+# Restart Nginx to apply changes
+sudo service nginx start
