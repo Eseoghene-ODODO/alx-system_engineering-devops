@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
-#Installs Nginx and configure it
+# A redirection script
 
-#Install nginx
-sudo apt-get update
-sudo apt-get install -y nginx
 
 sudo ufw allow 'Nginx HTTP'
 
-mkdir -p /var/www/html/
-sudo chmod -R 755 /var/www
+echo 'Hello World!' > /var/www/html/index.html
 
 SERVER_CONFIG=\
 "server {
@@ -21,11 +17,12 @@ SERVER_CONFIG=\
 		try_files \$uri \$uri/ =404;
 	}
 	if (\$request_filename ~ redirect_me){
-		rewrite ^ https://www.github.com/Eseoghene-ODODO/ permanent;
+		rewrite ^ https://github.com/Eseoghene-ODODO?tab=repositories/ permanent;
 	}
 }"
 
 bash -c "echo -e '$SERVER_CONFIG' > /etc/nginx/sites-enabled/default"
+
 if [ "$(pgrep -c nginx)" -le 0 ]; then
 	service nginx start
 else
