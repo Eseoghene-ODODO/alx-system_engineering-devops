@@ -2,8 +2,8 @@
 #Installs Nginx and configure it
 
 # Install Nginx web server
-apt-get update
-apt-get install -y nginx
+sudo apt-get update
+sudo apt-get install -y nginx
 
 # Create a new configuration file for the redirection
 cat << EOF > /etc/nginx/conf.d/redirect.conf
