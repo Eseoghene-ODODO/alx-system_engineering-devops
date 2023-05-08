@@ -1,44 +1,44 @@
 #!/usr/bin/env bash
 # A script that configures a Nginx server to have a custom 404 page that contains the string Ceci n'est pas une page
 
-# Install Nginx web server
-sudo apt-get update
-sudo apt-get install -y nginx
+# Install Nginx if it's not already installed
+if ! command -v nginx &> /dev/null
+then
+    sudo apt update
+    sudo apt install nginx
+fi
 
-# Create a new configuration file for the 404 page
-cat << EOF > /etc/nginx/sites-available/default
+# Create a custom 404 page with the desired string
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html > /dev/null
+
+# Update the Nginx configuration file
+sudo tee /etc/nginx/sites-available/default > /dev/null <<EOF
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
 
     root /var/www/html;
-
-    index index.html index.htm;
+    index index.html index.htm index.nginx-debian.html;
 
     server_name _;
-
-    location /404.html {
-        internal;
-        root /var/www/html;
-    }
-
-    error_page 404 /404.html;
-
-    location = /404.html {
-        internal;
-        return 404 "Ceci n'est pas une page.\n";
-    }
 
     location / {
         try_files \$uri \$uri/ =404;
     }
+
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+        root /var/www/html;
+    }
 }
 EOF
 
-# Test the configuration file to make sure it's valid
-nginx -t
+# Test the configuration syntax
+sudo nginx -t
 
-# If the configuration file is valid, reload Nginx to apply the new configuration
-if nginx -t; then
-    service nginx reload
+# Reload the Nginx configuration if the syntax is valid
+if [ $? -eq 0 ]
+then
+    sudo systemctl reload nginx
 fi
