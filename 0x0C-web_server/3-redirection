@@ -10,14 +10,12 @@ cat << EOF > /etc/nginx/conf.d/redirect.conf
 server {
     listen 80;
     server_name one-techschool.tech;
-    return 301 http://www.github.com$request_uri;
+    return 301 http://www.github.com\$request_uri;
 }
 EOF
 
 # Test the configuration file to make sure it's valid
-nginx -t
-
-# If the configuration file is valid, reload Nginx to apply the new configuration
-if [ $? -eq 0 ]; then
+if nginx -t; then
+    # If the configuration file is valid, reload Nginx to apply the new configuration
     service nginx reload
 fi
