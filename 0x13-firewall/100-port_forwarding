@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Configure web-01 so that its firewall redirects port 8080/TCP to port 80/TCP.
+
+
+# Connect to web-01 server via SSH
+ssh ubuntu@35.175.132.186 << EOF
+
+# Open UFW configuration file for editing
+sudo nano /etc/ufw/before.rules
+
+# Append port forwarding rules
+cat << 'EOT' | sudo tee -a /etc/ufw/before.rules > /dev/null
+
+# Port forwarding from 8080 to 80
+*nat
+:PREROUTING ACCEPT [0:0]
+-A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+COMMIT
+
+EOT
+
+# Restart UFW firewall
+sudo ufw disable
+sudo ufw enable
+
+# Display UFW status
+sudo ufw status
+
+EOF
