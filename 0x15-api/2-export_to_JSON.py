@@ -9,6 +9,7 @@ import json
 import requests
 import sys
 
+
 def export_employee_todo_progress(employee_id):
     """
     Retrieve and export the employee's TODO list progress in JSON format.

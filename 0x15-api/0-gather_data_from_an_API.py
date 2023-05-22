@@ -2,7 +2,8 @@
 
 """
 Module: todo_progress
-Description: This module retrieves information about an employee's TODO list progress from a REST API.
+Description: This module retrieves information about an employee's
+TODO list progress from a REST API.
 """
 
 import requests
@@ -36,7 +37,8 @@ def get_employee_todo_progress(employee_id):
 
     employee_name = employee_data.get('name')
 
-    print(f"Employee {employee_name} is done with tasks ({completed_tasks}/{total_tasks}):")
+    print(f"Employee {employee_name} is done with tasks "
+          f"({completed_tasks}/{total_tasks}):")
     for todo in todos:
         if todo.get('completed'):
             print(f"\t{todo.get('title')}")
