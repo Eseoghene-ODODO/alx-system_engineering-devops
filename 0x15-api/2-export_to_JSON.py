@@ -1,8 +1,7 @@
 #!/usr/bin/python3
-
 """
-Module: todo_progress_json
-Description: This module retrieves information about an employee's TODO list progress from a REST API and exports it in JSON format.
+Python script that uses the requests module to get information about an
+employee's TODO list progress using a REST API.
 """
 
 import json
@@ -10,48 +9,61 @@ import requests
 import sys
 
 
-def export_employee_todo_progress(employee_id):
+def get_employee_todo_list_progress(user_id):
     """
-    Retrieve and export the employee's TODO list progress in JSON format.
+    Get information about an employee's TODO list progress using a REST API.
 
     Args:
-        employee_id (int): The ID of the employee.
+        user_id (int): The ID of the employee.
 
     Returns:
-        None
+        str: The employee TODO list progress in this exact format:
+            Employee EMPLOYEE_NAME is done with tasks(NUMBER_OF_DONE_TASKS/
+            TOTAL_NUMBER_OF_TASKS):
+            Second and N next lines display the title of completed tasks:
+            TASK_TITLE (with 1 tabulation and 1 space before the TASK_TITLE)
     """
-    employee_url = f'https://jsonplaceholder.typicode.com/users/{employee_id}'
-    employee_response = requests.get(employee_url)
-    employee_data = employee_response.json()
-
-    if 'id' not in employee_data:
-        print(f"Employee with ID {employee_id} not found.")
-        return
-
-    todos_url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
-    todos_response = requests.get(todos_url)
-    todos = todos_response.json()
-
-    employee_name = employee_data['username']
-    json_data = {str(employee_id): []}
-
-    for todo in todos:
-        task_completed = todo['completed']
-        task_title = todo['title']
-        json_data[str(employee_id)].append({"task": task_title, "completed": task_completed, "username": employee_name})
-
-    json_file = f"{employee_id}.json"
-
-    with open(json_file, 'w') as file:
-        json.dump(json_data, file, indent=4)
-
-    print(f"TODO list progress for Employee {employee_name} exported to {json_file}")
+    url = 'https://jsonplaceholder.typicode.com/users/{}/todos'.format(user_id)
+    response = requests.get(url)
+    todos = response.json()
+    user_url = 'https://jsonplaceholder.typicode.com/users/{}'.format(user_id)
+    user_response = requests.get(user_url)
+    user = user_response.json()
+    done_tasks = [task for task in todos if task.get('completed')]
+    return 'Employee {} is done with tasks({}/{}):\n{}'.format(
+        user.get('name'), len(done_tasks), len(todos),
+        '\n'.join(['\t {}'.format(task.get('title')) for task in done_tasks])
+    )
 
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 todo_progress_json.py employee_id")
-        sys.exit(1)
+def export_employee_todo_list_to_json(user_id):
+    """
+    Export information about an employee's TODO list progress to a JSON file
+    using a REST API.
 
-    employee_id = int(sys.argv[1])
-    export_employee_todo_progress(employee_id)
+    Args:
+        user_id (int): The ID of the employee.
+    """
+    url = 'https://jsonplaceholder.typicode.com/users/{}/todos'.format(user_id)
+    response = requests.get(url)
+    todos = response.json()
+    user_url = 'https://jsonplaceholder.typicode.com/users/{}'.format(user_id)
+    user_response = requests.get(user_url)
+    user = user_response.json()
+
+    data = {}
+    data[user_id] = []
+
+    for task in todos:
+        data[user_id].append({
+            'task': task.get('title'),
+            'completed': task.get('completed'),
+            'username': user.get('username')
+        })
+
+    with open('{}.json'.format(user_id), mode='w') as json_file:
+        json.dump(data, json_file)
+
+
+if __name__ == '__main__':
+    export_employee_todo_list_to_json(int(sys.argv[1]))
