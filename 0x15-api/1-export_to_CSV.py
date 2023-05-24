@@ -1,55 +1,69 @@
 #!/usr/bin/python3
-
 """
-Module: todo_progress_csv
-Description: This module retrieves information about an employee's TODO list progress from a REST API and exports it in CSV format.
+Python script that uses the requests module to get information about an
+employee's TODO list progress using a REST API.
 """
 
 import csv
 import requests
 import sys
 
-def export_employee_todo_progress(employee_id):
+
+def get_employee_todo_list_progress(user_id):
     """
-    Retrieve and export the employee's TODO list progress in CSV format.
+    Get information about an employee's TODO list progress using a REST API.
 
     Args:
-        employee_id (int): The ID of the employee.
+        user_id (int): The ID of the employee.
 
     Returns:
-        None
+        str: The employee TODO list progress in this exact format:
+            Employee EMPLOYEE_NAME is done with tasks
+            (NUMBER_OF_DONE_TASKS/TOTAL_NUMBER_OF_TASKS):
+            Second and N next lines display the title of completed tasks:
+            TASK_TITLE (with 1 tabulation and 1 space before the TASK_TITLE)
     """
-    employee_url = f'https://jsonplaceholder.typicode.com/users/{employee_id}'
-    employee_response = requests.get(employee_url)
-    employee_data = employee_response.json()
-
-    if 'id' not in employee_data:
-        print(f"Employee with ID {employee_id} not found.")
-        return
-
-    todos_url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
-    todos_response = requests.get(todos_url)
-    todos = todos_response.json()
-
-    employee_name = employee_data['username']
-    csv_file = f"{employee_id}.csv"
-
-    with open(csv_file, 'w', newline='') as file:
-        writer = csv.writer(file, quoting=csv.QUOTE_ALL)
-        writer.writerow(['USER_ID', 'USERNAME', 'TASK_COMPLETED_STATUS', 'TASK_TITLE'])
-
-        for todo in todos:
-            task_completed = str(todo['completed'])
-            task_title = todo['title']
-            writer.writerow([str(employee_id), employee_name, task_completed, task_title])
-
-    print(f"TODO list progress for Employee {employee_name} exported to {csv_file}")
+    url = 'https://jsonplaceholder.typicode.com/users/{}/todos'.format(user_id)
+    response = requests.get(url)
+    todos = response.json()
+    user_url = 'https://jsonplaceholder.typicode.com/users/{}'.format(user_id)
+    user_response = requests.get(user_url)
+    user = user_response.json()
+    done_tasks = [task for task in todos if task.get('completed')]
+    return 'Employee {} is done with tasks({}/{}):\n{}'.format(
+        user.get('name'), len(done_tasks), len(todos),
+        '\n'.join(['\t {}'.format(task.get('title')) for task in done_tasks])
+    )
 
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 todo_progress_csv.py employee_id")
-        sys.exit(1)
+def export_employee_todo_list_to_csv(user_id):
+    """
+    Export information about an employee's TODO list
+    progress to a CSV file using a REST API.
 
-    employee_id = int(sys.argv[1])
-    export_employee_todo_progress(employee_id)
+    Args:
+        user_id (int): The ID of the employee.
+    """
+    url = 'https://jsonplaceholder.typicode.com/users/{}/todos'.format(user_id)
+    response = requests.get(url)
+    todos = response.json()
+    user_url = 'https://jsonplaceholder.typicode.com/users/{}'.format(user_id)
+    user_response = requests.get(user_url)
+    user = user_response.json()
+
+    with open('{}.csv'.format(user_id), mode='w') as csv_file:
+        fieldN = ['USER_ID', 'USERNAME', 'TASK_COMPLETED_STATUS', 'TASK_TITLE']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+        writer.writeheader()
+        for task in todos:
+            writer.writerow({
+                'USER_ID': user_id,
+                'USERNAME': user.get('username'),
+                'TASK_COMPLETED_STATUS': task.get('completed'),
+                'TASK_TITLE': task.get('title')
+            })
+
+
+if __name__ == '__main__':
+    export_employee_todo_list_to_csv(int(sys.argv[1]))
