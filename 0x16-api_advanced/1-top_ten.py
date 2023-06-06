@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 """
-Queries the Reddit API and prints the titles of the first 10 hot posts for a given subreddit.
+Queries the Reddit API and prints the titles of the first 10 hot posts
+for a given subreddit.
 If not a valid subreddit, prints None.
 """
 
@@ -10,7 +11,8 @@ import requests
 
 def top_ten(subreddit):
     """
-    Queries the Reddit API and prints the titles of the first 10 hot posts for a given subreddit.
+    Queries the Reddit API and prints the titles of the first 10 hot posts
+    for a given subreddit.
     If the subreddit is invalid, prints None.
     """
     # Set a custom User-Agent header
