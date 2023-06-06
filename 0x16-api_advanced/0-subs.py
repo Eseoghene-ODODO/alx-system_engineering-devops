@@ -31,6 +31,6 @@ def number_of_subscribers(subreddit):
 
 
 if __name__ == '__main__':
-    subreddit = 'python'
+    subreddit = '/subreddits/mine/subscriber'
     subscribers = number_of_subscribers(subreddit)
     print(f"The subreddit r/{subreddit} has {subscribers} subscribers.")
