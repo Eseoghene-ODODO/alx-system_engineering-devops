@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
-A script that contains arecursive function that queries the Reddit API, parses
-the title of all hot articles, and prints a sorted count of given keywords
+recursive function that queries the Reddit API, parses the title of all hot
+articles, and prints a sorted count of given keywords
 (case-insensitive, delimited by spaces. Javascript should count as javascript,
 but java should not).
 """
@@ -11,8 +11,8 @@ import re
 
 def count_words(subreddit, word_list, counts={}, after=None):
     """
-    Prints a sorted count of given keywords in the titles
-    of all hot posts for a given subreddit
+    Prints a sorted count of given keywords in the titles of all hot posts
+    for a given subreddit
     """
     # Set the custom User-Agent header
     headers = {"User-Agent": "Bing"}
@@ -52,9 +52,7 @@ def count_words(subreddit, word_list, counts={}, after=None):
             # value and ascending key
             else:
                 for word, count in sorted(
-                        counts.items(),
-                        key=lambda x: (-x[1], x[0])
-                        ):
+                        counts.items(), key=lambda x: (-x[1], x[0])):
                     print("{}: {}".format(word, count))
     # If not a valid subreddit or other errors, print nothing
     return None
