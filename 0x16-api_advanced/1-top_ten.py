@@ -1,38 +1,26 @@
 #!/usr/bin/python3
-
 """
-Queries the Reddit API and prints the titles of the first 10 hot posts
-for a given subreddit.
-If not a valid subreddit, prints None.
+This module contains a function that queries the Reddit API and prints the
+titles of the first 10 hot posts for a given subreddit
 """
-
 import requests
 
 
 def top_ten(subreddit):
-    """
-    Queries the Reddit API and prints the titles of the first 10 hot posts
-    for a given subreddit.
-    If the subreddit is invalid, prints None.
-    """
-    # Set a custom User-Agent header
-    headers = {'User-Agent': 'My Reddit Client'}
-
-    # Make the API request
-    url = f'https://www.reddit.com/r/{subreddit}/hot.json?limit=10'
-    response = requests.get(url, headers=headers, allow_redirects=False)
-
-    # Check if the request was successful
+    """Prints the titles of the first 10 hot posts for a given subreddit"""
+    # Set the custom User-Agent header
+    headers = {"User-Agent": "Bing"}
+    # Make a GET request to the subreddit's hot.json endpoint with a limit of 10
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    params = {"limit": 10}
+    response = requests.get(url, headers=headers, params=params, allow_redirects=False)
+    # Check the status code and the response data
     if response.status_code == 200:
-        data = response.json()
-        posts = data['data']['children']
-        for post in posts:
-            title = post['data']['title']
-            print(title)
+        data = response.json().get("data")
+        if data:
+            # Iterate over the children list and print the titles
+            for post in data.get("children", []):
+                print(post.get("data", {}).get("title", ""))
     else:
+        # Print None for invalid subreddit or other errors
         print(None)
-
-
-if __name__ == '__main__':
-    subreddit = 'python'
-    top_ten(subreddit)
