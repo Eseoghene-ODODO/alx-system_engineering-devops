@@ -4,6 +4,11 @@
 include apache
 
 # Manage the wp-settings.php file
+package { 'apache2':
+  ensure => installed,
+  # Add any additional package attributes here
+}
+
 file { '/var/www/html/wp-settings.php':
   ensure  => file,
   owner   => 'www-data',
