@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# This script displays 1 - 20 while at 4, 9 and 17 it displays bad luck in (China, Japan and Italy) using while loop and case
+num=1
+while [ $num -le 20 ]
+do
+	echo "$num"
+	case $num in
+		4)
+			echo "bad luck in China";;
+		9)
+			echo "bad luck in Japan";;
+		19)
+			echo "bad luck in Italy";;
+	esac
+	((num++))
+done
