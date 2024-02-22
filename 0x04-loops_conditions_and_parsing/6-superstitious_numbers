@@ -9,7 +9,7 @@ do
 			echo "bad luck from China";;
 		9)
 			echo "bad luck from Japan";;
-		19)
+		17)
 			echo "bad luck from Italy";;
 	esac
 	((num++))
