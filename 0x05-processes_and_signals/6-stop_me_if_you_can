@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 # A script that kills task 4 process
-pid=$(pgrep -f "4-to_infinity_and_betond")
-pkill -s SIGINT "$pid"
+pkill -f "./4-to_infinity_and_betond"
