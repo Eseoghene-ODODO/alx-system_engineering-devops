@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# A script that displays the pid, process name and the word bash
+pgrep -l bash | cat
