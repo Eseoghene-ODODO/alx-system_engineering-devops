@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 # A script that kills task 4 process
-pkill -TERM -f ./4-to_infinity_and_betond
+pkill -TERM -f "./4-to_infinity_and_betond"
