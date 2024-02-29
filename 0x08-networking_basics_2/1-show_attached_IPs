@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Use ifconfig to display active IPv4 IPs
+ifconfig | grep -oP 'inet\s+\K[\d.]+'
