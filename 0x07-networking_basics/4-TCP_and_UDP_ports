@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Bash script that displays listening ports
+sudo lsof -iPn | grep LISTEN | awk '{print $2, $1, $8}'
