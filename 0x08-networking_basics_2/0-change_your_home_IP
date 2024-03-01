@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 # Update DNS resolutions inside Docker container
-echo "127.0.0.2 localhost" | sudo tee -a /etc/hosts
-echo "8.8.8.8 facebook.com" | sudo tee -a /etc/hosts
+cp /etc/hosts ~/hosts.new
+sed -i 's/127.*$/127.0.0.2 localhost\n8.8.8.8 facebook.com/' ~/hosts.new
+cp -f ~/hosts.new /etc/hosts
