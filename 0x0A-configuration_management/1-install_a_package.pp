@@ -4,7 +4,8 @@ package { 'python3-pip':
   ensure => 'present',
 }
 
-Package { 'flask': 
-  version => 2.1.0,
+Package { 'flask':
+  ensure => 'present',
+  version => '2.1.0',
   require  => Package['python3-pip'],
 }
