@@ -5,7 +5,7 @@ package { 'python3-pip':
 }
 
 python::pip { 'flask':
-  ensure   => 'present' 
+  ensure   => 'present', 
   version => '2.1.0',
   provider => 'pip3',
   require  => Package['python3-pip'],
