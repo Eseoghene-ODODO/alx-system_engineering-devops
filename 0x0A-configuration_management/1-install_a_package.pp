@@ -5,7 +5,7 @@ package { 'python3-pip':
 }
 
 Package { 'flask':
-  ensure => installed,
+  ensure => 'installed',
   version => '2.1.0',
   provider => 'pip3',
   path => ['/usr/bin'],
