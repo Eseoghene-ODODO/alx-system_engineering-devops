@@ -8,5 +8,6 @@ Package { 'flask':
   ensure => installed,
   version => '2.1.0',
   provider => 'pip3',
+  path => ['/usr/bin'],
   require  => Package['python3-pip'],
 }
