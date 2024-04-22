@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+#Installs Nginx and configure it
+
+# Install Nginx web server
+sudo apt-get install -y nginx
+
+# Create a new configuration file for the redirection
+cat << EOF > /etc/nginx/conf.d/redirect.conf
+server {
+    listen 80;
+    server_name one-techschool.tech;
+
+    location /redirect_me {
+        return 301 http://github.com/redirected_page;
+    }
+}
+EOF
+
+# Test the configuration file to make sure it's valid
+if nginx -t; then
+    # If the configuration file is valid, reload Nginx to apply the new configuration
+    service nginx reload
+fi
