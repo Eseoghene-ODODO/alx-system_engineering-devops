@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# A script that gives me a page
+
+# Start a Docker container with the Apache server
+docker run -d -p 8080:80 --name my-apache-server httpd:2.4
+
+# Create an HTML file that contains the "Hello Holberton" message
+echo "Hello Holberton" > index.html
+
+# Copy the HTML file to the Apache server's document root directory
+docker cp index.html my-apache-server:/usr/local/apache2/htdocs/
+
+# Restart the Apache server
+docker exec -it my-apache-server /usr/local/apache2/bin/httpd -k restart
