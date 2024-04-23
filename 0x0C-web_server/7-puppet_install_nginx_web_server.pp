@@ -1,7 +1,13 @@
-# Start and enable Nginx service
+# Install Nginx package
+package { 'nginx':
+  ensure => installed,
+}
+
+# Configure Nginx service
 service { 'nginx':
-  ensure => running,
-  enable => true,
+  ensure  => running,
+  enable  => true,
+  require => Package['nginx'],
 }
 
 # Configure Nginx server
@@ -27,4 +33,5 @@ server {
 EOF
 ,
   notify  => Service['nginx'],
+  require => Package['nginx'],
 }
