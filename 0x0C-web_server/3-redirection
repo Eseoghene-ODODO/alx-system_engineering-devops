@@ -3,7 +3,14 @@
 #Installs Nginx and configure it
 
 # Install Nginx web server
+sudo apt-get update
 sudo apt-get install -y nginx
+
+# Modify Nginx configuration to remove "default_server" from "listen 80" line
+sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
+
+# Reload Nginx to apply the configuration changes
+sudo systemctl reload nginx
 
 # Create a new configuration file for the redirection
 cat << EOF > /etc/nginx/conf.d/redirect.conf
@@ -20,5 +27,5 @@ EOF
 # Test the configuration file to make sure it's valid
 if nginx -t; then
     # If the configuration file is valid, reload Nginx to apply the new configuration
-    service nginx reload
+    sudo systemctl reload nginx
 fi
