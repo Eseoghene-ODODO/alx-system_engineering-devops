@@ -16,10 +16,10 @@ sudo systemctl reload nginx
 cat << EOF > /etc/nginx/conf.d/redirect.conf
 server {
     listen 80;
-    server_name coding-academy.tech;
+    server_name one-techschool.tech;
 
     location /redirect_me {
-        return 301 http://github.com;
+        return 301 http://github.com/redirected_page;
     }
 }
 EOF
