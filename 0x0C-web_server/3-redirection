@@ -3,29 +3,22 @@
 #Installs Nginx and configure it
 
 # Install Nginx web server
-sudo apt-get update
-sudo apt-get install -y nginx
+apt-get -y update
+apt-get -y install nginx
+echo 'Hello World!' > /var/www/html/index.nginx-debian.html
+rewrite="server {
+        listen 80;
+        listen [::]:80;
 
-# Modify Nginx configuration to remove "default_server" from "listen 80" line
-sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
+        root /var/www/html;
+        index index.html index.htm index.nginx-debian.html;
 
-# Reload Nginx to apply the configuration changes
-sudo systemctl reload nginx
+        server_name _;
+        location /redirect_me {
+            return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+}"
 
-# Create a new configuration file for the redirection
-cat << EOF > /etc/nginx/conf.d/redirect.conf
-server {
-    listen 80;
-    server_name coding-academy.tech;
-
-    location /redirect_me {
-        return 301 http://github.com;
-    }
-}
-EOF
-
-# Test the configuration file to make sure it's valid
-if nginx -t; then
-    # If the configuration file is valid, reload Nginx to apply the new configuration
-    sudo systemctl reload nginx
-fi
+echo -e "$rewrite" > /etc/nginx/sites-available/redirect
+ln -sf /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/
+sudo nginx -t
+service nginx restart
